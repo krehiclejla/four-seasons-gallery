@@ -1,0 +1,33 @@
+{
+  "id": "four-seasons-gallery",
+  "package_id": "6ac2c4db-4012-4a17-9ec7-182038f48af9",
+  "name": "The Four Seasons Gallery",
+  "version": "1.0.0",
+  "description": "Walk a museum of four seasons: each wing plays its Vivaldi concerto, hangs five paintings and is full of things to play with, by day or by night.",
+  "entry": "index.jsx",
+  "icon": "icon.png",
+  "offline_capable": false,
+  "display": "fullscreen",
+  "theme_color": "#120d0b",
+  "background_color": "#120d0b",
+  "permissions": {},
+  "source_files": [],
+  "store": {
+    "tagline": "Walk a museum of the four seasons, each wing playing its Vivaldi concerto.",
+    "description": "The Four Seasons Gallery is a walk-through 3D museum for phone and desktop, made in Game Studio on Möbius.\n\nA domed rotunda opens onto four wings: Spring, Summer, Autumn and Winter. Each wing plays its concerto from Vivaldi's Four Seasons, hangs five public-domain paintings (Botticelli, Arcimboldo, Bruegel, Monet, Van Gogh, Seurat, Levitan, Klimt, Avercamp) and looks out through a great window onto its own 3D landscape.\n\nThings to play with\n- Shake the blossom tree and the maple, make the fountain leap and the orrery's planets race\n- Kick beach balls and apples, scatter leaf piles, watch a summer storm with lightning and thunder\n- Make the skaters jump and spin, ring the ice chandelier, shake the music-box snow globe\n- Pull the brass lever to turn day into night: candlelit galleries, stars and northern lights, fireflies and a harvest bonfire, and each wing switches to its slow night movement\n\nControls: WASD and the mouse on a computer; on a phone the left thumb walks and the right thumb looks; tap things to play with them.\n\nMusic: Vivaldi, The Four Seasons, performed by John Harrison with the Wichita State University Chamber Players (CC BY-SA 4.0). Full credits in CREDITS.md.",
+    "screenshots": [
+      {"src": "static/store/rotunda.png", "alt": "A domed rotunda with red damask walls, a spinning ring of four glowing season orbs and a brass day-and-night lever.", "label": "The rotunda"},
+      {"src": "static/store/spring.png", "alt": "The Spring wing: a blossom tree, flower beds and framed paintings under a glass roof.", "label": "Spring"},
+      {"src": "static/store/summer-storm.png", "alt": "Lightning strikes over a Tuscan landscape seen through the Summer wing's arched window.", "label": "Summer storm"},
+      {"src": "static/store/night-hall.png", "alt": "The Spring wing at night, lit by picture lamps, candle sconces and fairy lights.", "label": "By night"},
+      {"src": "static/store/winter-night.png", "alt": "Northern lights over a snowy village through the Winter wing's window.", "label": "Winter night"}
+    ]
+  },
+  "static_assets": {
+    "godot.js": "game/godot.js",
+    "index.wasm.gz": "game/index.wasm.gz",
+    "index.pck": "game/index.pck",
+    "index.audio.worklet.js": "game/index.audio.worklet.js",
+    "index.audio.position.worklet.js": "game/index.audio.position.worklet.js"
+  }
+}
