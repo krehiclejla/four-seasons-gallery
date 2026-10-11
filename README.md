@@ -10,9 +10,10 @@ Controls: WASD / arrows and the mouse on a computer; left thumb walks and right 
 phone; tap or click things to play with them. N toggles day and night.
 
 ## How it is packaged
-- `game/` holds the Godot web export: `godot.js`, the game pack `index.pck`, the audio worklets,
-  and the engine as `index.wasm.gz` (gzip-compressed to fit the 64 MiB app package).
-- `index.jsx` downloads those files with a progress bar and hands them to an inline game frame
+- `game/` holds the Godot web export: `godot.js`, the audio worklets, and the engine (gzip-compressed
+  to fit the 64 MiB app package) and game pack, each split into 1 MB parts (`wasm/`, `pck/`,
+  counted in `parts.json`) so every file stays small enough to publish.
+- `index.jsx` downloads those files (joining the parts) with a progress bar and hands them to an inline game frame
   (`srcdoc`), which unpacks the engine with `DecompressionStream` and starts Godot. The game runs
   in srcdoc rather than the `/app-embeds` lane because that lane's policy does not allow
   WebAssembly. The cover hides only after the frame's `fsg:ready` message.

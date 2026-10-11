@@ -26,7 +26,6 @@ const CSS = `
 `
 
 const SEASONS = [['Spring', '#f4b6c8'], ['Summer', '#f5b82e'], ['Autumn', '#e9864a'], ['Winter', '#a9d8f5']]
-const SIZES = { 'godot.js': 279815, 'index.wasm.gz': 10054758, 'index.pck': 35001092 }
 
 const BOOT = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>html,body{margin:0;height:100%;overflow:hidden;background:#120d0b;touch-action:none}canvas{display:block;width:100%;height:100%;outline:none}</style></head>
@@ -89,27 +88,39 @@ export default function App({ appId }) {
         w.postMessage({ type: 'fsg:files', ...files.current, assetBase: new URL(base, window.location.href).href }, '*')
       }
     }
-    const load = async (name) => {
+    // fetch one file, counting its bytes toward the progress bar
+    const fetchCounted = async (name) => {
       const res = await fetch(base + name)
       if (!res.ok) throw new Error(name + ' ' + res.status)
       const reader = res.body.getReader()
-      const parts = []
+      const chunks = []
       got[name] = 0
       for (;;) {
         const { done, value } = await reader.read()
         if (done) break
-        parts.push(value)
+        chunks.push(value)
         got[name] += value.length
-        const all = Object.values(SIZES).reduce((a, b) => a + b, 0)
         const have = Object.values(got).reduce((a, b) => a + b, 0)
-        if (alive) setPct(Math.min(99, Math.round((have / all) * 100)))
+        if (alive) setPct(Math.min(99, Math.round((have / total) * 100)))
       }
-      return new Blob(parts)
+      return new Blob(chunks)
     }
+    // the engine and the game pack are stored as 1 MB parts; fetch a few at a time, join in order
+    const loadParts = async (kind, count) => {
+      const names = Array.from({ length: count }, (_, i) => `${kind}/part-${String(i).padStart(3, '0')}.bin`)
+      const blobs = new Array(count)
+      let next = 0
+      const worker = async () => { while (next < count) { const i = next++; blobs[i] = await fetchCounted(names[i]) } }
+      await Promise.all([worker(), worker(), worker(), worker()])
+      return new Blob(blobs)
+    }
+    let total = 45335665
     ;(async () => {
       try {
         if (!files.current) {
-          const [js, wasmGz, pck] = await Promise.all([load('godot.js'), load('index.wasm.gz'), load('index.pck')])
+          const parts = await (await fetch(base + 'parts.json')).json()
+          total = parts.wasm.bytes + parts.pck.bytes + 279815
+          const [js, wasmGz, pck] = await Promise.all([fetchCounted('godot.js'), loadParts('wasm', parts.wasm.count), loadParts('pck', parts.pck.count)])
           files.current = { engineJs: await js.text(), wasmGz, pck }
         }
         if (alive) setPct(100)
